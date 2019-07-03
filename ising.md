@@ -39,7 +39,7 @@ $$\begin{aligned}
 $Z$ is a function of $\beta$ the thermodynamic inverse temperature, and $H$ is the Hamiltonian described above. The Hamiltonian tells us about the energy of a state, and the exponential term is the Boltzmann factor, an exponential weighting of the state with respect to it's energy calculated by $H(\sigma)$. This term is analagous to an exponential distribution of the likeliness for some state to occur. The probability of a state occuring at some $\beta$ can be simply written as
 
 $$\begin{aligned}
-  P(\sigma | \beta) = \frac{1}{Z} \exp(-\beta H(\sigma)
+  P(\sigma | \beta) = \frac{1}{Z} \exp(-\beta H(\sigma))
 \end{aligned}$$
 
 This shows that configurations $\sigma$ are statistically distributed and independently sampled. Knowing this, we would like to show that supervised learning techniques are likely to be able to solve the problem of classifying matter states.
