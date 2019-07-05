@@ -5,7 +5,7 @@ The data follows the IDX format presented by MNIST, instructions for using the f
 
 The configurations were sampled from various temperature points above and below the phase transition, the phase is labeled as well as the temperature the Monte Carlo simulation was run at. The data and labels are stored in separate files, with an even 50-50 test/train split. There is no validation set, and neither set is shuffled, so users are encouraged to shuffle the data themselves. The test set is generated with the same procedure as the training set.
 
-The training set consists of 20,000 configurations, with half in an ordered phase, half in a disordered phase. The data was generated from a Metropolis-Hastings algorithm.  
+The training set consists of 20,000 configurations, with half in an ordered phase, half in a disordered phase. The data was generated from a Metropolis-Hastings algorithm.
 
 ## Introduction
 In the 1920s, the idea of magnetism, particularly ferromagnetism, was beginning to be closely studied. Physicist Wilhelm Lenz proposed a mathematical model to his then student Ernst Ising (pronounced *EE-ZING*), to describe a system of spins which compose a ferromagnet. The microscopic configuration of such spins determine important physical properties of the material as a whole.
