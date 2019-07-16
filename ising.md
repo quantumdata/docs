@@ -12,7 +12,7 @@ The dataset names indicate the system size.
 
 | Name  	|  Size 	|  Comments  	|
 |--- |---	|---	|
-| <ul><li>[ising-20x20.txt]()</li><li>[ising-20x20.byte]()</li></ul> | 5MB  	|   	|
+| <ul><li>[ising-28x28.npy]()</li><li>[ising-28x28-lbl.npy]()</li></ul> | 5MB  	|   	|
 | <ul><li>[ising-40x40.txt]()</li><li>[ising-40x40.byte]()</li></ul>  | 10MB  	|   	|
 | <ul><li>[ising-60x60.txt]()</li><li>[ising-60x60.byte]()</li></ul>  | 20MB  	|   	|
 | <ul><li>[ising-80x80.txt]()</li><li>[ising-80x80.byte]()</li></ul>  | 40MB  	|   	||
@@ -22,10 +22,10 @@ The dataset names indicate the system size.
 Loading the training set can be done in Python as follows
 ```python
 import numpy as np
-dataset = np.loadtxt("ising-20x20.txt")
-inputs = dataset[:,0]
-labels = dataset[:,1]
-temperatures = dataset[:,2]
+snapshots = np.load("ising-28x28.npy")
+labels    = np.load("ising-28x28-lbl.npy")
+phases    = labels[:,0]
+temperatures = labels[:,1]
 ```
 
 ## Decscriptions
