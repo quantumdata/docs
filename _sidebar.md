@@ -3,3 +3,4 @@
 * [Transverse Field Ising Model](tfim.md)
 * [Z2 Gauge Model](z2.md)
 * [Classical XY model](xy.md)
+* [Dataset Formats](format.md)
