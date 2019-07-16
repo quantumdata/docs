@@ -3,9 +3,9 @@
 ## Short summary
 The Ising dataset contains spin-configuration snapshots. Each snapshot is labeled with a temperature (continuous) and a phase (binary) classification label (further details below). Each set consists of 20,000 training images and 20,000 test snapshots.
 
-Here are some example snapshots in this dataset
+Here are some example snapshots in this dataset, with temperature $T$ and label $\ell$ indicated.
 
-* Snapshots here (c.f. CIFAR)
+![alt text](imgs/IsingExamples.png "Example snapshots of 10x10 Ising data")
 
 ## Download
 The dataset names indicate the system size.
