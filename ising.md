@@ -1,18 +1,68 @@
 # The Ising Model
 
-## Data Documentation
-The data follows the IDX format presented by MNIST, instructions for using the file format in python are included in the jupyter notebook. The simple dataset consists of 28x28 spin configurations, designed to be a drop-in replacement for MNIST, but with a dataset that is physically relevant for benchmarking new, general physics based network architectures. Larger system sizes are also included. 
+## Short summary
+The Ising dataset contains spin-configuration snapshots. Each snapshot is labeled with a temperature (continuous) and a phase (binary) classification label (further details below). Each set consists of 20,000 training images and 20,000 test snapshots.
 
-The configurations were sampled from various temperature points above and below the phase transition, the phase is labeled as well as the temperature the Monte Carlo simulation was run at. The data and labels are stored in separate files, with an even 50-50 test/train split. There is no validation set, and neither set is shuffled, so users are encouraged to shuffle the data themselves. The test set is generated with the same procedure as the training set.
+Here are some example snapshots in this dataset
 
-The training set consists of 20,000 configurations, with half in an ordered phase, half in a disordered phase. The data was generated from a Metropolis-Hastings algorithm.
+* Snapshots here (c.f. CIFAR)
 
-## Introduction
+## Download
+The dataset names indicate the system size.
+
+| Name  	|  Size 	|  Comments  	|
+|--- |---	|---	|
+| <ul><li>[ising-20x20.txt]()</li><li>[ising-20x20.byte]()</li></ul> | 5MB  	|   	|
+| <ul><li>[ising-40x40.txt]()</li><li>[ising-40x40.byte]()</li></ul>  | 10MB  	|   	|
+| <ul><li>[ising-60x60.txt]()</li><li>[ising-60x60.byte]()</li></ul>  | 20MB  	|   	|
+| <ul><li>[ising-80x80.txt]()</li><li>[ising-80x80.byte]()</li></ul>  | 40MB  	|   	||
+
+
+## Dataset layout
+Loading the training set can be done in Python as follows
+```python
+import numpy as np
+dataset = np.loadtxt("ising-20x20.txt")
+inputs = dataset[:,0]
+labels = dataset[:,1]
+temperatures = dataset[:,2]
+```
+
+## Decscriptions
+### Lay description
+Each pixel in a snapshot represents a little magnetic arrow (a.k.a a spin) variable, pointing either up (black) or down (white). These spins interact with their nearest neighbours, and try to align themselves. This alignment is only perfect at very small temperatures, resulting in a ferromagnetic system (phase label 0). As the temperature increases beyond critical, thermal fluctuations prevent the alignment and the system transitions into a paramagnetic system (phase label 1) where spins point up & down randomly. Possible machine learning applications on this dataset include:
+* Learning to classify the snapshots into phase 0 or phase 1
+* Extracting the transition temperature from a reduced dataset including only the smallest and largest temperatures [[1,2]](#References).
+* Learning the partition function $P(\textrm{configuration})$.
+
+### Advanced decscription
+Let ${ \sigma_1, \sigma_2, ... \sigma_L \}$ be a set of $L$ spin variables on a 2D lattice, with each spin $\sigma_i \in \{ -1, +1 \}$. Spins at lattice points $i,j$ interact with their nearest neighbors (indicated by $\langle i,j \rangle$) only, with an interaction strength $J$. The Hamiltonian governing these spins is
+
+$$\begin{aligned}
+  H = -J\sum_{\langle i,j \rangle} \sigma_i\sigma_j
+\end{aligned}$$
+
+This model is exactly solvable, and the dataset uses labels taken from the exact solution. The snapshots are generated at a given temperature $T = 1/\beta$ by drawing samples according to the thermal distribution
+
+$$\begin{aligned}
+  P(\sigma | \beta) = \frac{1}{Z} \exp(-\beta H(\sigma)).
+\end{aligned}$$
+
+The samples are drawn using [Metropolis-Hastings Monte Carlo](). (We could use the Wolff algorithm instead?)
+
+## Baselines
+### Unsupervised
+
+### Supervised
+
+
+## More information
+### Model history
 In the 1920s, the idea of magnetism, particularly ferromagnetism, was beginning to be closely studied. Physicist Wilhelm Lenz proposed a mathematical model to his then student Ernst Ising (pronounced *EE-ZING*), to describe a system of spins which compose a ferromagnet. The microscopic configuration of such spins determine important physical properties of the material as a whole.
 
 One of the questions of interest for a model like the Ising model is what are the physical properties and how do they arise. Given certain parameters what configurations is the model likely to take on, and what sorts of values should we expect for the observable quantities this model produces. For example, quantities of interest include the magnetization, average configuration energies, specific heat, etc. The other question we naturally should ask is given the set of physical observables, is it possible to determine which state the system originated from? If this is possible, by looking at the output of a neural network trained to recognized states, we can look at discontinuities when the network predicts one phase versus another.
 
-## Physical Observables of the Ising Model
+### Physical Observables of the Ising Model
 
 We can define the model of the configurations of Ising states. Let $\Lambda \{ \sigma_1, \sigma_2, ... \sigma_L \}$ be a set of size $L$ of interacting lattice points. At each site $i$, we have a spin $\sigma_i$ which can be either up or down, $\sigma_i \in \{ -1, +1 \}$. Spins at lattice points $i,j$ interact with interaction strength $J$. We also place the model in an external field $h$. In order to describe the system, we introduce the Hamiltonian which governs the energy of the system:
 
