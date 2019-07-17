@@ -10,14 +10,16 @@ Here are some example snapshots in this dataset, with temperature $T$ and label 
 Different system sizes are available to allow for a finite-size scaling analysis.
 
 ## Download
+If you use this dataset for a publication, please cite the ...
+
 The dataset names indicate the system size.
 
-| Name  	|  Size 	|  Checksum  	|
-| :--- | :---: |--- |
-| [ising-28x28.zip]() | 5MB  	|   	|
-| [ising-40x40.zip]()  | 10MB  	|   	|
-| [ising-60x60.zip]()  | 20MB  	|   	|
-| [ising-80x80.zip]()  | 40MB  	|   	||
+| Name  	|  Size 	|  MD5 Checksum  	| Comments |
+| :--- | :---: |--- | :---: |
+| [ising-28x28.zip]() | 5MB  	|   	| $L=28$ |
+| [ising-40x40.zip]()  | 10MB  	|   	|  |
+| [ising-60x60.zip]()  | 20MB  	|   	| |
+| [ising-80x80.zip]()  | 40MB  	|   	| 10.000 samples |  |
 
 See [alternative formats](#alternative-formats) for other data formats.
 
@@ -36,10 +38,12 @@ The temperatures in the dataset range from $T=1$ to $T=3.4$ in $\ldots$ steps, a
 
 ## Descriptions
 ### Lay description
-Each pixel in a snapshot represents a little magnetic arrow (a.k.a a spin) variable, pointing either up (black) or down (white). These spins interact with their nearest neighbors, and try to align themselves. This alignment is only perfect at very small temperatures, resulting in a ferromagnetic system (phase label 0). As the temperature increases beyond critical, thermal fluctuations prevent the alignment and the system transitions into a paramagnetic system (phase label 1) where spins point up & down randomly. Possible machine learning applications on this dataset include:
+Each pixel in a snapshot represents a little magnetic arrow (a.k.a a *spin*) variable, pointing either up (black, value +1) or down (white, value -1). These spins interact with their nearest neighbors, and try to align themselves. This alignment is only perfect at very small temperatures, resulting in a ferromagnetic system (phase label 0). As the temperature increases beyond critical, thermal fluctuations prevent the alignment and the system transitions into a paramagnetic system (phase label 1) where spins point up & down randomly. Possible machine learning applications on this dataset include:
 * Learning to classify the snapshots into phase 0 or phase 1
 * Extracting the transition temperature from aWhile you're here, check out this quantum game I madeWhile you're here, check out this quantum game I made reduced dataset including only the smallest and largest temperatures [[1,2]](#References).
 * Learning the partition function $P(\textrm{configuration})$.
+
+Refer to the [Baselines](#baselines) section for example results.
 
 ### Advanced decscription
 Let ${ \sigma_1, \sigma_2, ... \sigma_L \}$ be a set of $L$ spin variables on a 2D lattice, with each spin $\sigma_i \in \{ -1, +1 \}$. Spins at lattice points $i,j$ interact with their nearest neighbors (indicated by $\langle i,j \rangle$) only, with an interaction strength $J$. The Hamiltonian governing these spins is
