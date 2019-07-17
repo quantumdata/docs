@@ -17,6 +17,7 @@ The dataset names indicate the system size.
 | [ising-60x60.zip]()  | 20MB  	|   	|
 | [ising-80x80.zip]()  | 40MB  	|   	||
 
+See [alternative formats](#alternative-formats) for other data formats.
 
 ## Dataset layout
 Each compressed zip file contains two python archives, one with the snapshots and a separate one with labels. The following script shows how to load both:
@@ -57,10 +58,22 @@ The samples are drawn using [Metropolis-Hastings Monte Carlo](). (We could use t
 
 ## Baselines
 ### Unsupervised
+#### Principal component analysis
+See reference [4](Lei Wang)
+
+![alt text](imgs/IsingPCAExample.png "PCA analysis of 28x28 dataset")
+
 
 ### Supervised
+Todo
 
 
+## Alternative formats
+| Name  	|  Size 	|  Checksum  	|
+| :--- | :---: |--- |
+| [ising-28x28.ubyte.img]() | 5MB  	|   	|
+| [ising-40x40.txt]()  | 10MB  	|   	|
+| ...  | 20MB  	|   	||
 
 
 ## More information
