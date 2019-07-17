@@ -10,29 +10,32 @@ Here are some example snapshots in this dataset, with temperature $T$ and label 
 ## Download
 The dataset names indicate the system size.
 
-| Name  	|  Size 	|  Comments  	|
-|--- |---	|---	|
-| <ul><li>[ising-28x28.npy]()</li><li>[ising-28x28-lbl.npy]()</li></ul> | 5MB  	|   	|
-| <ul><li>[ising-40x40.txt]()</li><li>[ising-40x40.byte]()</li></ul>  | 10MB  	|   	|
-| <ul><li>[ising-60x60.txt]()</li><li>[ising-60x60.byte]()</li></ul>  | 20MB  	|   	|
-| <ul><li>[ising-80x80.txt]()</li><li>[ising-80x80.byte]()</li></ul>  | 40MB  	|   	||
+| Name  	|  Size 	|  Checksum  	|
+| :--- | :---: |--- |
+| [ising-28x28.zip]() | 5MB  	|   	|
+| [ising-40x40.zip]()  | 10MB  	|   	|
+| [ising-60x60.zip]()  | 20MB  	|   	|
+| [ising-80x80.zip]()  | 40MB  	|   	||
 
 
 ## Dataset layout
-Loading the training set can be done in Python as follows
+Each compressed zip file contains two python archives, one with the snapshots and a separate one with labels. The following script shows how to load both:
 ```python
 import numpy as np
-snapshots = np.load("ising-28x28.npy")
-labels    = np.load("ising-28x28-lbl.npy")
-phases    = labels[:,0]
+snapshots    = np.load("ising-28x28.npy")
+labels       = np.load("ising-28x28-lbl.npy")
+phases       = labels[:,0]
 temperatures = labels[:,1]
 ```
+The temperatures in the dataset range from $T=1$ to $T=3.4$ in $\ldots$ steps, and each temperature has $\ldots$ samples. The phase label takes values $0$ and $1$.
+
+
 
 ## Decscriptions
 ### Lay description
-Each pixel in a snapshot represents a little magnetic arrow (a.k.a a spin) variable, pointing either up (black) or down (white). These spins interact with their nearest neighbours, and try to align themselves. This alignment is only perfect at very small temperatures, resulting in a ferromagnetic system (phase label 0). As the temperature increases beyond critical, thermal fluctuations prevent the alignment and the system transitions into a paramagnetic system (phase label 1) where spins point up & down randomly. Possible machine learning applications on this dataset include:
+Each pixel in a snapshot represents a little magnetic arrow (a.k.a a spin) variable, pointing either up (black) or down (white). These spins interact with their nearest neighbors, and try to align themselves. This alignment is only perfect at very small temperatures, resulting in a ferromagnetic system (phase label 0). As the temperature increases beyond critical, thermal fluctuations prevent the alignment and the system transitions into a paramagnetic system (phase label 1) where spins point up & down randomly. Possible machine learning applications on this dataset include:
 * Learning to classify the snapshots into phase 0 or phase 1
-* Extracting the transition temperature from a reduced dataset including only the smallest and largest temperatures [[1,2]](#References).
+* Extracting the transition temperature from aWhile you're here, check out this quantum game I madeWhile you're here, check out this quantum game I made reduced dataset including only the smallest and largest temperatures [[1,2]](#References).
 * Learning the partition function $P(\textrm{configuration})$.
 
 ### Advanced decscription
@@ -50,10 +53,14 @@ $$\begin{aligned}
 
 The samples are drawn using [Metropolis-Hastings Monte Carlo](). (We could use the Wolff algorithm instead?)
 
+
+
 ## Baselines
 ### Unsupervised
 
 ### Supervised
+
+
 
 
 ## More information
