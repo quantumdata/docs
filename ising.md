@@ -1,11 +1,13 @@
 # The Ising Model
 
 ## Short summary
-The Ising dataset contains spin-configuration snapshots. Each snapshot is labeled with a temperature (continuous) and a phase (binary) classification label (further details below). Each set consists of 20,000 training images and 20,000 test snapshots.
+The Ising dataset contains spin-configuration snapshots. Each snapshot is labeled with a temperature (continuous) and a phase (binary) classification label ([further details below](#Descriptions)). Each set consists of 100 samples per temperature $T$ in the range $T = 1.0$ to $T=3.4$ in steps of size $0.1$, totalling to 20.000 samples per dataset.
 
 Here are some example snapshots in this dataset, with temperature $T$ and label $\ell$ indicated.
 
 ![alt text](imgs/IsingExamples.png "Example snapshots of 10x10 Ising data")
+
+Different system sizes are available to allow for a finite-size scaling analysis.
 
 ## Download
 The dataset names indicate the system size.
@@ -32,7 +34,7 @@ The temperatures in the dataset range from $T=1$ to $T=3.4$ in $\ldots$ steps, a
 
 
 
-## Decscriptions
+## Descriptions
 ### Lay description
 Each pixel in a snapshot represents a little magnetic arrow (a.k.a a spin) variable, pointing either up (black) or down (white). These spins interact with their nearest neighbors, and try to align themselves. This alignment is only perfect at very small temperatures, resulting in a ferromagnetic system (phase label 0). As the temperature increases beyond critical, thermal fluctuations prevent the alignment and the system transitions into a paramagnetic system (phase label 1) where spins point up & down randomly. Possible machine learning applications on this dataset include:
 * Learning to classify the snapshots into phase 0 or phase 1
