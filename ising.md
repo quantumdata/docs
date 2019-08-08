@@ -1,7 +1,7 @@
 # The Ising Model
 
 ## Short summary
-The Ising dataset contains spin-configuration snapshots. Each snapshot is labeled with a temperature (continuous) and a phase (binary) classification label ([further details below](#Descriptions)). Each set consists of 100 samples per temperature $T$ in the range $T = 1.0$ to $T=3.4$ in steps of size $0.1$, totalling to 20.000 samples per dataset.
+The Ising dataset contains spin-configuration snapshots. Each snapshot is labeled with a temperature (continuous) and a phase (binary) classification label ([further details below](#Descriptions)). Each set consists of 1.000 samples per temperature $T$ in the range $T = 1.0$ to $T=3.5$ in steps of size $0.05$, totalling to $51,000$ samples per dataset.
 
 Here are some example snapshots in this dataset, with temperature $T$ and label $\ell$ indicated.
 
@@ -12,19 +12,20 @@ Different system sizes are available to allow for a finite-size scaling analysis
 ## Download
 If you use this dataset for a publication, please cite the ...
 
-The dataset names indicate the system size.
+Below are datasets with various system sizes in the `.npy` format, suitable for use in python. If you require alternative file formats, they are provided below. 
 
-| Name  	|  Size 	|  MD5 Checksum  	| Comments |
-| :--- | :---: |--- | :---: |
-| [ising-28x28.zip]() | 5MB  	|   	| $L=28$ |
-| [ising-40x40.zip]()  | 10MB  	|   	|  |
-| [ising-60x60.zip]()  | 20MB  	|   	| |
-| [ising-80x80.zip]()  | 40MB  	|   	| 10.000 samples |  |
+| Name  	|  Size 	|  MD5 Checksum  	| 
+| :--- | :---: | :--- | 
+| [ising-28x28-npy.tar.gz](https://github.com/quantumdata/data/releases/tag/v0.1-alpha) | 6.6MB  	| e933f050f6b2bcc5d20595a3f8a74744  	| 
+| [ising-32x32-npy.tar.gz](https://github.com/quantumdata/data/releases/tag/v0.1-alpha)  | 8.6MB  	| 3032be59ab009080b69117ff5bece567  	|
+| [ising-48x48-npy.tar.gz](https://github.com/quantumdata/data/releases/tag/v0.1-alpha)  | 19MB  	| bb6e72b74a45427abea53996d05753bf  	|
+| [ising-64x64-npy.tar.gz](https://github.com/quantumdata/data/releases/tag/v0.1-alpha)  | 34MB  	| 7cf378e17b5b7e2316e6611f2b759652  	|
 
 See [alternative formats](#alternative-formats) for other data formats.
 
 ## Dataset layout
 Each compressed zip file contains two python archives, one with the snapshots and a separate one with labels. The following script shows how to load both:
+
 ```python
 import numpy as np
 snapshots    = np.load("ising-28x28.npy")
@@ -32,9 +33,8 @@ labels       = np.load("ising-28x28-lbl.npy")
 phases       = labels[:,0]
 temperatures = labels[:,1]
 ```
-The temperatures in the dataset range from $T=1$ to $T=3.4$ in $\ldots$ steps, and each temperature has $\ldots$ samples. The phase label takes values $0$ and $1$.
 
-
+The temperatures in the dataset range from $T=1$ to $T=3.5$ in $51$ steps of size $0.05$, and each temperature has $1,000$ samples. The phase label takes values $0$ and $1$. The temperature closest to the transition temperature in the thermodynamic limit is $2.25$. 
 
 ## Descriptions
 ### Lay description
@@ -45,8 +45,8 @@ Each pixel in a snapshot represents a little magnetic arrow (a.k.a a *spin*) var
 
 Refer to the [Baselines](#baselines) section for example results.
 
-### Advanced decscription
-Let ${ \sigma_1, \sigma_2, ... \sigma_L \}$ be a set of $L$ spin variables on a 2D lattice, with each spin $\sigma_i \in \{ -1, +1 \}$. Spins at lattice points $i,j$ interact with their nearest neighbors (indicated by $\langle i,j \rangle$) only, with an interaction strength $J$. The Hamiltonian governing these spins is
+### Advanced description
+Let $\{ \sigma_1, \sigma_2, ... \sigma_N \}$ be a set of $N$ spin variables on a 2D lattice, with each spin $\sigma_i \in \{ -1, +1 \}$. Spins at lattice points $i,j$ interact with their nearest neighbors (indicated by $\langle i,j \rangle$) only, with an interaction strength $J$. The Hamiltonian governing these spins is
 
 $$\begin{aligned}
   H = -J\sum_{\langle i,j \rangle} \sigma_i\sigma_j
@@ -58,7 +58,7 @@ $$\begin{aligned}
   P(\sigma | \beta) = \frac{1}{Z} \exp(-\beta H(\sigma)).
 \end{aligned}$$
 
-The samples are drawn using [Metropolis-Hastings Monte Carlo](). (We could use the Wolff algorithm instead?)
+The samples are drawn using the [Metropolis-Hastings]() Monte Carlo algorithm in conjunction with Wolff cluster updates. 
 
 
 
@@ -67,19 +67,23 @@ The samples are drawn using [Metropolis-Hastings Monte Carlo](). (We could use t
 #### Principal component analysis
 See reference [4](Lei Wang)
 
+
 ![alt text](imgs/IsingPCAExample.png "PCA analysis of 28x28 dataset")
 
 
-### Supervised
-Todo
+### Supervised Learning
+This model serves as a simple toy model for classifier architectures targeted at physical models. Many networks perform well on the dataset. An [example work](https://arxiv.org/abs/1605.01735) that illustrates a possible machine learning project on this dataset. We wish to classify the two different phases in the model. We can begin by defining a simple feed-forward net, a single layer fully connected neural net with ~100 hidden units with ReLU activation, dropout regularization, and softmax. 
 
+This model performs quite well on our dataset, you should be able to obtain over 90% accuracy on our tests.
+
+Another interesting way of evaluating our model is to see what sorts of output we get at what temperature. We expect very low temperature and very high temperature to be quite accurate, since they are either all random or all identical spins. Near the critical point, we would like to see how our model performs. 
+
+![alt text](imgs/Ising_Nature_Example.png "Network accuracy/output by temperature")
+
+There is also a point where our model "decides" to predict a different class more often. We can use temperatures around but not including the critical point to interpolate a critical point.
 
 ## Alternative formats
-| Name  	|  Size 	|  Checksum  	|
-| :--- | :---: |--- |
-| [ising-28x28.ubyte.img]() | 5MB  	|   	|
-| [ising-40x40.txt]()  | 10MB  	|   	|
-| ...  | 20MB  	|   	||
+We provide alternative data formats for users not using `numpy` or python. [ising.txt]() is available for 
 
 
 ## More information
@@ -98,57 +102,9 @@ $$\begin{aligned}
 
 The notation $\langle i,j \rangle$ denotes nearest neighbours only. Since we have analytic solutions for the partition function, we can also calculate exact values of observables, including energy, specific heat, magnetization, and magnetic susceptibility. We can plot the real values from the dataset against theoretical values.
 
+![alt text](imgs/Ising_Thermo.png "Thermodynamic properties of our data vs. Theoretical")
+
 *Note that the size 28x28 system sizes suffers from finite size effects particularly in the magnetism*
-
-
-
-## Supervised Learning
-
-In the age of state-of-the-art neural networks that outperform both their human and machine counterparts, it's commonly assumed that machine learning could solve any problem. For the reasoned scientist however, it is not immediately clear why we should expect Ising configurations to be easily classified by a neural network. To gain intuition, we should look at the structure of the configurations themselves, for this we turn to the Hamiltonian.
-
-For those unfamiliar with statistical mechanics, we require some background. Firstly, we introduce the partition function which describes the distribution of microstates in an ensemble, defined as the following
-
-$$\begin{aligned}
-  Z = \sum_\sigma \exp(-\beta H(\sigma))
-\end{aligned}$$
-
-$Z$ is a function of $\beta$ the thermodynamic inverse temperature, and $H$ is the Hamiltonian described above. The Hamiltonian tells us about the energy of a state, and the exponential term is the Boltzmann factor, an exponential weighting of the state with respect to it's energy calculated by $H(\sigma)$. This term is analagous to an exponential distribution of the likeliness for some state to occur. The probability of a state occuring at some $\beta$ can be simply written as
-
-$$\begin{aligned}
-  P(\sigma | \beta) = \frac{1}{Z} \exp(-\beta H(\sigma))
-\end{aligned}$$
-
-This shows that configurations $\sigma$ are statistically distributed and independently sampled. Knowing this, we would like to show that supervised learning techniques are likely to be able to solve the problem of classifying matter states.
-
-Now we present the problem with a statistical background, we define the class variable $Y \in \{ 0, 1 \}$ to represent the phase which we are trying to learn, and we try to create an estimator function $f(\sigma)$ which returns $0,1$. We then construct a *loss* function $L(Y,f(\sigma))$ to essentially score our estimator as a criterion for selecting an appropriate $f$. One possible loss function can be defined to be the zero-one loss function which produces a unit loss per error. Measuring the performance of such a network would be to see the probability of error. A solution for $f$ then is
-
-$$\begin{aligned}
-  f(x) &= \text{argmin}_c L(Y,c) \\
-  &= \text{argmin}_y P(Y=y\neq f(\sigma)) \\
-  &= \text{argmax}_y P(Y=y | \sigma) \\
-  &= \text{argmax}_y P(\sigma | Y) P(Y = y)
-\end{aligned}$$
-
-Where we have used the Bayes theorem in the last line. Here, we have shown that $f$ is exactly solvable if we know $P(\sigma | Y)$, the class conditional density, and $P(Y=y)$, the class prior. Since the 2D Ising model is solved for 0 external field, we not only have the partition function to tell us the probability $P(\sigma | \beta)$ we also have a solution for the critical temperature where a phase transition occurs
-
-$$\begin{aligned}
-\text{Phase}(\beta) = \left \{
-  \begin{matrix}
-    0 & 1/\beta > T_c J \\
-    1 & 1/\beta < T_c J
-  \end{matrix}
-\right .
-\end{aligned}$$
-
-Where $T_c = 2/\ln{1+\sqrt{2}}$. This means we have an expression for the class conditional density
-
-$$\begin{aligned}
-  P(\sigma | Y=y) = \sum_{\text{Phase}(\beta) = y} P(\sigma | \beta)
-\end{aligned}$$
-
-Given this information[^1], we can exacly calculate the optimal Bayesian decision boundary by formulating it as a simple optimization problem. Take the log-likelihood of the samples, and compute the first and second derivatives and solve for the maxima. This method  produces the optimal decision boundary for this problem, though is intractable and cannot be calculated in practice. Fortunately, given that an optimal classifier exists for a dataset, then there also exists methods to learn the optimal classifier, and such is the challenge for the reader.
-
-[^1]: *At this point, we can choose either MLE or MAP estimators. In practice, the prior distribution is often fairly uniform*
 
 ## References {docsify-ignore}
 
