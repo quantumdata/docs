@@ -58,7 +58,7 @@ $$\begin{aligned}
   P(\sigma | \beta) = \frac{1}{Z} \exp(-\beta H(\sigma)).
 \end{aligned}$$
 
-The samples are drawn using the [Metropolis-Hastings]() Monte Carlo algorithm in conjunction with Wolff cluster updates. 
+The samples are drawn using the [Metropolis-Hastings](https://en.wikipedia.org/wiki/Metropolis-Hastings_algorithm) Monte Carlo algorithm in conjunction with Wolff cluster updates. 
 
 
 
@@ -83,7 +83,7 @@ Another interesting way of evaluating our model is to see what sorts of output w
 There is also a point where our model "decides" to predict a different class more often. We can use temperatures around but not including the critical point to interpolate a critical point.
 
 ## Alternative formats
-We provide alternative data formats for users not using `numpy` or python. [ising.txt]() is available for 
+We provide alternative data formats for users not using `numpy` or python. [ising.txt]() is available for users of other languages. Note that `.npy` tends to be faster in python even if you don't plan on using `numpy` itself.  
 
 
 ## More information
@@ -105,6 +105,8 @@ The notation $\langle i,j \rangle$ denotes nearest neighbours only. Since we hav
 ![alt text](imgs/Ising_Thermo.png "Thermodynamic properties of our data vs. Theoretical")
 
 *Note that the size 28x28 system sizes suffers from finite size effects particularly in the magnetism*
+
+The thick yellow line represents exact calculated values. There is a noticeable discrepancy in the magnetism, since the calculated values are for the theoretical limit of an infinite system size. A finitely sized system can only approach the non-analytical cusp.
 
 ## References {docsify-ignore}
 
