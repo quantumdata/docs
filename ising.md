@@ -1,6 +1,6 @@
 # The Ising Model
 
-## Short summary
+## Summary
 The Ising dataset contains spin-configuration snapshots. Each snapshot is labeled with a temperature (continuous) and a phase (binary) classification label ([further details below](#Descriptions)). Each set consists of 1.000 samples per temperature $T$ in the range $T = 1.0$ to $T=3.5$ in steps of size $0.05$, totalling to $51,000$ samples per dataset.
 
 Here are some example snapshots in this dataset, with temperature $T$ and label $\ell$ indicated.
@@ -10,9 +10,9 @@ Here are some example snapshots in this dataset, with temperature $T$ and label 
 Different system sizes are available to allow for a finite-size scaling analysis.
 
 ## Download
-If you use this dataset for a publication, please cite the ...
+<!-- If you use this dataset for a publication, please cite the ... -->
 
-Below are datasets with various system sizes in the `.npy` format, suitable for use in python. If you require alternative file formats, they are provided below. 
+Below are datasets with various system sizes in the `.npy` format, suitable for use in python. 
 
 | Name  	|  Size 	|  MD5 Checksum  	| 
 | :--- | :---: | :--- | 
@@ -37,35 +37,25 @@ temperatures = labels[:,1]
 The temperatures in the dataset range from $T=1$ to $T=3.5$ in $51$ steps of size $0.05$, and each temperature has $1,000$ samples. The phase label takes values $0$ and $1$. The temperature closest to the transition temperature in the thermodynamic limit is $2.25$. 
 
 ## Descriptions
-### Lay description
+### Simple description
 Each pixel in a snapshot represents a little magnetic arrow (a.k.a a *spin*) variable, pointing either up (black, value +1) or down (white, value -1). These spins interact with their nearest neighbors, and try to align themselves. This alignment is only perfect at very small temperatures, resulting in a ferromagnetic system (phase label 0). As the temperature increases beyond critical, thermal fluctuations prevent the alignment and the system transitions into a paramagnetic system (phase label 1) where spins point up & down randomly. Possible machine learning applications on this dataset include:
 * Learning to classify the snapshots into phase 0 or phase 1
-* Extracting the transition temperature from aWhile you're here, check out this quantum game I madeWhile you're here, check out this quantum game I made reduced dataset including only the smallest and largest temperatures [[1,2]](#References).
+* Extracting the transition temperature from a reduced dataset including only the smallest and largest temperatures [[1,2]](#References).
 * Learning the partition function $P(\textrm{configuration})$.
 
 Refer to the [Baselines](#baselines) section for example results.
 
-### Advanced description
-Let $\{ \sigma_1, \sigma_2, ... \sigma_N \}$ be a set of $N$ spin variables on a 2D lattice, with each spin $\sigma_i \in \{ -1, +1 \}$. Spins at lattice points $i,j$ interact with their nearest neighbors (indicated by $\langle i,j \rangle$) only, with an interaction strength $J$. The Hamiltonian governing these spins is
-
-$$\begin{aligned}
-  H = -J\sum_{\langle i,j \rangle} \sigma_i\sigma_j
-\end{aligned}$$
-
-This model is exactly solvable, and the dataset uses labels taken from the exact solution. The snapshots are generated at a given temperature $T = 1/\beta$ by drawing samples according to the thermal distribution
-
-$$\begin{aligned}
-  P(\sigma | \beta) = \frac{1}{Z} \exp(-\beta H(\sigma)).
-\end{aligned}$$
-
-The samples are drawn using the [Metropolis-Hastings](https://en.wikipedia.org/wiki/Metropolis-Hastings_algorithm) Monte Carlo algorithm in conjunction with Wolff cluster updates. 
-
-
-
 ## Baselines
+
+Phase classification results
+
+| Classifier | Test Error Rate (%) | Reference | Comments |
+| :---: | ---: | :---: | :--- |
+| FFNN | 50% | | |
+
 ### Unsupervised
 #### Principal component analysis
-See reference [4](Lei Wang)
+Unsupervised methods can be used to separate the two classes, see reference [4](Lei Wang). We use PCA to process the dataset, with the following results.
 
 
 ![alt text](imgs/IsingPCAExample.png "PCA analysis of 28x28 dataset")
@@ -108,6 +98,7 @@ The notation $\langle i,j \rangle$ denotes nearest neighbours only. Since we hav
 
 The thick yellow line represents exact calculated values. There is a noticeable discrepancy in the magnetism, since the calculated values are for the theoretical limit of an infinite system size. A finitely sized system can only approach the non-analytical cusp.
 
+There is a clear distinction between the two phases indicated by a sharp cusp in the magnetism, and divergence in the specific heat and magnetic susceptibility. These are values that can be analytically calculated, since the Ising model has an analytic solution, but not all models do.
 ## References {docsify-ignore}
 
 
