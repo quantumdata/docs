@@ -2,19 +2,14 @@
 
 ## What is this database?
 
-The quantum database is a collection of open, standardized datasets for benchmarking numerical and machine learning techniques for qu</strong>antum state reconstruction, tomography, and inference on various quantum condensed matter systems. We initiated this database in an effort to provide researchers in physics and machine learning with easily accessible data to benchmark their network architectures.
-
-*Curtido is a relish made from a usually made from a collection of vegetables such as cabbage, onion, carrots, typically served as a side with pupusas, the national delicacy of Salvador.*
+The quantum database is a collection of open, standardized datasets for benchmarking numerical and machine learning techniques for quantum state reconstruction, tomography, and inference on various quantum condensed matter systems. We initiated this database in an effort to provide researchers in physics and machine learning with easily accessible data to benchmark their network architectures.
 
 ## Datasets
 
 The following datasets are available now or in the near future:
 
-#### Available now
-* 2D Ising model spin configurations (classical)
-
-#### Available soon
-* Z2 2D Ising Gauge theory bond configurations
+* [2D Ising model spin](ising.md) configurations (classical)
+* [Z2 2D Ising Gauge theory](z2.md) bond configurations
 * 1D Ising model with transverse field spin configurations (available soon)
 * 2D Classical XY model (the $O(2)$ rotor model)
 * 2D Spin 1/2 Quantum Heisenberg Model
