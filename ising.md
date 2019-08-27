@@ -1,80 +1,75 @@
 # The Ising Model
 
 ## Summary
-The Ising dataset contains spin-configuration snapshots. Each snapshot is labeled with a temperature (continuous) and a phase (binary) classification label ([further details below](#Descriptions)). Each set consists of 1.000 samples per temperature $T$ in the range $T = 1.0$ to $T=3.5$ in steps of size $0.05$, totalling to $51,000$ samples per dataset.
+The Ising dataset is the canonical dataset for getting into machine learning for physics. Since this canonical Ising model is not quantum, the dataset consists of classical spin-configuration snapshots. Each snapshot is labeled with a temperature (a continuous number) and a phase (binary) classification label ([further details below](#Descriptions)). Each set consists of a 1000 samples per temperature $T$ in the range $T = 1.0$ to $T=3.5$ in steps of size $0.05$, totaling to $51,000$ samples per dataset (and hence 51 temperatures).
 
 Here are some example snapshots in this dataset, with temperature $T$ and label $\ell$ indicated.
 
-![alt text](imgs/IsingExamples.png "Example snapshots of 10x10 Ising data")
+![alt text](imgs/IsingExamples.png "Example snapshots of 28x28 Ising data")
 
 Different system sizes are available to allow for a finite-size scaling analysis.
 
 ## Download
 <!-- If you use this dataset for a publication, please cite the ... -->
 
-Below are datasets with various system sizes in the `.npy` format, suitable for use in python. 
+Below are datasets with various system sizes in the `.npy` format, for easy use in python.
 
-| Name  	|  Size 	|  MD5 Checksum  	| 
-| :--- | :---: | :--- | 
-| [ising-28x28-npy.tar.gz](https://github.com/quantumdata/data/releases/tag/v0.1-alpha) | 6.6MB  	| e933f050f6b2bcc5d20595a3f8a74744  	| 
-| [ising-32x32-npy.tar.gz](https://github.com/quantumdata/data/releases/tag/v0.1-alpha)  | 8.6MB  	| 3032be59ab009080b69117ff5bece567  	|
-| [ising-48x48-npy.tar.gz](https://github.com/quantumdata/data/releases/tag/v0.1-alpha)  | 19MB  	| bb6e72b74a45427abea53996d05753bf  	|
-| [ising-64x64-npy.tar.gz](https://github.com/quantumdata/data/releases/tag/v0.1-alpha)  | 34MB  	| 7cf378e17b5b7e2316e6611f2b759652  	|
+| Name  	|  Size 	|  MD5 Checksum  	|
+| :--- | :---: | :--- |
+| [ising-28x28-npy.tar.gz](https://github.com/quantumdata/data/releases/tag/v0.1-ising-npy) | 6.6MB  	| e933f050f6b2bcc5d20595a3f8a74744  	|
+| [ising-32x32-npy.tar.gz](https://github.com/quantumdata/data/releases/tag/v0.1-ising-npy)  | 8.6MB  	| 3032be59ab009080b69117ff5bece567  	|
+| [ising-48x48-npy.tar.gz](https://github.com/quantumdata/data/releases/tag/v0.1-ising-npy)  | 19MB  	| bb6e72b74a45427abea53996d05753bf  	|
+| [ising-64x64-npy.tar.gz](https://github.com/quantumdata/data/releases/tag/v0.1-ising-npy)  | 34MB  	| 7cf378e17b5b7e2316e6611f2b759652  	|
 
 See [alternative formats](#alternative-formats) for other data formats.
 
 ## Dataset layout
-Each compressed zip file contains two python archives, one with the snapshots and a separate one with labels. The following script shows how to load both:
+Each compressed zip file contains multiple python archives, one with the snapshots and a separate one with labels. The following script shows how to load both:
 
 ```python
 import numpy as np
 snapshots    = np.load("ising-28x28.npy")
 labels       = np.load("ising-28x28-lbl.npy")
 phases       = labels[:,0]
-temperatures = labels[:,1]
+temperatures = labels[:,1]  # = np.arange(1,3.55,0.05) (reversed)
 ```
 
-The temperatures in the dataset range from $T=1$ to $T=3.5$ in $51$ steps of size $0.05$, and each temperature has $1,000$ samples. The phase label takes values $0$ and $1$. The temperature closest to the transition temperature in the thermodynamic limit is $2.25$. 
+The temperatures in the dataset range from $T=1$ to $T=3.5$ in $51$ steps of size $0.05$, and each temperature has $1,000$ samples. The phase label takes values $0$ and $1$. The temperature closest to the transition temperature in the thermodynamic limit is $2.25$.
 
 ## Descriptions
-### Simple description
-Each pixel in a snapshot represents a little magnetic arrow (a.k.a a *spin*) variable, pointing either up (black, value +1) or down (white, value -1). These spins interact with their nearest neighbors, and try to align themselves. This alignment is only perfect at very small temperatures, resulting in a ferromagnetic system (phase label 0). As the temperature increases beyond critical, thermal fluctuations prevent the alignment and the system transitions into a paramagnetic system (phase label 1) where spins point up & down randomly. Possible machine learning applications on this dataset include:
-* Learning to classify the snapshots into phase 0 or phase 1
-* Extracting the transition temperature from a reduced dataset including only the smallest and largest temperatures [[1,2]](#References).
-* Learning the partition function $P(\textrm{configuration})$.
+Each pixel in a snapshot represents a little magnetic arrow (a.k.a a *spin*) variable, pointing either up (black, value +1) or down (white, value -1). These spins interact with their nearest neighbors, and try to align themselves. This alignment is only perfect at very small temperatures, resulting in a ferromagnetic system (phase label $\ell = 0$). As the temperature increases beyond critical ($T_c = 2.269$), thermal fluctuations prevent the alignment and the system transitions into a paramagnetic system (phase label $\ell = 1$) where spins point up & down randomly.
 
-Refer to the [Baselines](#baselines) section for example results.
+The data has been labeled according to the transition temperature of the thermodynamic limit.
 
-## Baselines
+## Example dataset uses
 
-Phase classification results
+Various machine learning analyses are possible on this dataset. Two highlights, each with different goals, are:
+* Learning to classify the snapshots into phase 0 or phase 1, with the goals of either extracting an [order parameter](https://en.wikipedia.org/wiki/Phase_transition#Order_parameters) or finding the [transition point](https://en.wikipedia.org/wiki/Phase_transition).
+* Learning the partition function (see [here](https://en.wikipedia.org/wiki/Partition_function_(statistical_mechanics)) $P(\textrm{configuration})$ using unsupervised methods.
 
-| Classifier | Test Error Rate (%) | Reference | Comments |
-| :---: | ---: | :---: | :--- |
-| FFNN | 50% | | |
+Give the [Challenge](#Challenge) below a go too.
 
-### Unsupervised
-#### Principal component analysis
-Unsupervised methods can be used to separate the two classes, see reference [4](Lei Wang). We use PCA to process the dataset, with the following results.
+#### Phase classification results
 
+##### Unsupervised (PCA)
+Unsupervised methods can be used to separate the two classes, see e.g. [this reference](https://arxiv.org/abs/1606.00318). A principal component analysis (PCA) works for this dataset, because the two phases are separable with a *linear& transformation. The dominant principal component corresponds simply to the intensity (~magnetization) of the snapshot, as the panel with normalized component 1 shows in the figure below.
 
-![alt text](imgs/IsingPCAExample.png "PCA analysis of 28x28 dataset")
+![alt text](imgs/IsingPCAExample.png "PCA analysis of the 64x64 dataset")
 
+##### Supervised Learning
+This model serves as a simple toy model for classifier architectures targeted at physical models. Many networks perform well on the dataset. Example works [here](https://arxiv.org/abs/1605.01735) or [here](https://arxiv.org/abs/1610.02048) illustrate some (semi-)supervised uses of this model.
 
-### Supervised Learning
-This model serves as a simple toy model for classifier architectures targeted at physical models. Many networks perform well on the dataset. An [example work](https://arxiv.org/abs/1605.01735) that illustrates a possible machine learning project on this dataset. We wish to classify the two different phases in the model. We can begin by defining a simple feed-forward net, a single layer fully connected neural net with ~100 hidden units with ReLU activation, dropout regularization, and softmax. 
+We repeat the essence of [this work](https://arxiv.org/abs/1605.01735) here, by defining a simple feed-forward net: a single layer fully connected neural net with ~100 hidden units with ReLU activation, dropout regularization, and softmax. This model performs quite well; you should be able to obtain over 90% accuracy on our test-sets.
 
-This model performs quite well on our dataset, you should be able to obtain over 90% accuracy on our tests.
+The figure below illustrates this in two ways. In the *rightmost* panel, we evaluate the model's label prediction by comparing the predicted label directly to the target label and record the accuracy of that prediction, for each temperature, averaged over the 1000 snapshots at that temperature. On the left we show to sets of curves: one with the accuracy of the networks' prediction of the label 0, and similarly for the prediction of label 1. Both of these show a drop in accuracy at the transition point.
 
-Another interesting way of evaluating our model is to see what sorts of output we get at what temperature. We expect very low temperature and very high temperature to be quite accurate, since they are either all random or all identical spins. Near the critical point, we would like to see how our model performs. 
+![alt text](imgs/Ising_Nature_Example.png "Network accuracy/output versus temperature")
 
-![alt text](imgs/Ising_Nature_Example.png "Network accuracy/output by temperature")
-
-There is also a point where our model "decides" to predict a different class more often. We can use temperatures around but not including the critical point to interpolate a critical point.
+### Challenge
+The above shows that supervised training is capable of classifying the data. The goal of this dataset in physics is to extract an as-accurate-as-possible transition temperature from a dataset, whilst assuming as little as possible about the correctness of the labels. As a challenge, restrict yourself to use only the data at temperatures below $T=1.5$ and above $T=3.0$, and see if you can use your model to evaluate the data at intermediate temperatures and extract the critical temperature.
 
 ## Alternative formats
-We provide alternative data formats for users not using `numpy` or python. [ising.txt]() is available for users of other languages. Note that `.npy` tends to be faster in python even if you don't plan on using `numpy` itself.  
-
+We provide alternative data formats for users not using `numpy` or python. For this model, plain text files are available [here](https://github.com/quantumdata/data/releases/tag/v0.1-ising-txt) Note that `.npy` tends to be faster in python even if you don't plan on using `numpy` itself, not to mention the much smaller filesize.
 
 ## More information
 ### Model history
@@ -99,10 +94,3 @@ The notation $\langle i,j \rangle$ denotes nearest neighbours only. Since we hav
 The thick yellow line represents exact calculated values. There is a noticeable discrepancy in the magnetism, since the calculated values are for the theoretical limit of an infinite system size. A finitely sized system can only approach the non-analytical cusp.
 
 There is a clear distinction between the two phases indicated by a sharp cusp in the magnetism, and divergence in the specific heat and magnetic susceptibility. These are values that can be analytically calculated, since the Ising model has an analytic solution, but not all models do.
-## References {docsify-ignore}
-
-
-Phys. Rev. 65 117 (1944)
-1103.3347
-1605.01735
-http://micro.stanford.edu/~caiwei/me334/Chap12_Ising_Model_v04.pdf
